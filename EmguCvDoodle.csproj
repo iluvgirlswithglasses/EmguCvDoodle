@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effect\Binary\BinaryEffect.cs" />
     <Compile Include="Effect\ContrastEffect.cs" />
     <Compile Include="Effect\GrayscaleEffect.cs" />
     <Compile Include="Invoker.cs" />
@@ -84,8 +85,6 @@
       <Version>4.5.5.4823</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Effect\Binary\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

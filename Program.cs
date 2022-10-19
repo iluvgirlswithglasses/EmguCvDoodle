@@ -3,6 +3,7 @@ using Emgu.CV.UI;
 using Emgu.CV;
 using System;
 using EmguCvDoodle.Effect;
+using EmguCvDoodle.Effect.Binary;
 
 /*
 deploy requirement:
@@ -23,21 +24,17 @@ namespace EmguCvDoodle
             Image<Bgr, Byte> canvas = new Image<Bgr, Byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\eiffel.jpg");
             ImageViewer.Show(canvas, "original");
 
+            // new GrayscaleEffect(ref canvas).Apply();
             new ContrastEffect(ref canvas).Apply(1.5, 0.5);
-            ImageViewer.Show(canvas, "contrast");
+            Invoker.GaussianBlur(ref canvas);
+            // ImageViewer.Show(canvas, "before binary");
 
-            Image<Bgr, Byte> st = new Image<Bgr, Byte>(canvas.Height, canvas.Width);
-            CvInvoke.Blur(
-                canvas, st, 
-                new System.Drawing.Size(5, 5), 
-                new System.Drawing.Point(2, 2), 
-                Emgu.CV.CvEnum.BorderType.Default
-            );
-            ImageViewer.Show(st, "blurred");
+            // new BinaryEffect(ref canvas).Apply(100.0);
+            // ImageViewer.Show(canvas, "binary effect");
+            ImageViewer.Show(canvas.Canny(50, 100), "Canny");
 
-            // https://en.wikipedia.org/wiki/Affine_transformation
-            Image<Bgr, Byte> nd = st.Rotate(45, new Bgr(0, 0, 0));
-            ImageViewer.Show(nd, "rotation");
+            // Image<Bgr, Byte> nd = canvas.Rotate(45, new Bgr(0, 0, 0));
+            // ImageViewer.Show(nd, "rotation");
         }
     }
 }

@@ -6,11 +6,14 @@ namespace EmguCvDoodle
 {
     static class Invoker
     {
-        static public Image<Bgr, Byte> Canny(ref Image<Bgr, Byte> canvas)
+        static public Image<Gray, Byte> Canny(ref Image<Bgr, Byte> canvas)
         {
-            Image<Bgr, Byte> res = new Image<Bgr, Byte>(canvas.Width, canvas.Height);
-            CvInvoke.Canny(canvas, res, 50, 200);
-            return res;
+            return canvas.Canny(50, 100);
+        }
+
+        static public void GaussianBlur(ref Image<Bgr, Byte> canvas)
+        {
+            canvas = canvas.SmoothGaussian(9);
         }
     }
 }

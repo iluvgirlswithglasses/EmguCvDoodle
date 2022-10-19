@@ -17,7 +17,7 @@ namespace EmguCvDoodle.Effect
         {
             for (int y = 0; y < canvas.Height; y++)
                 for (int x = 0; x < canvas.Width; x++)
-                    canvas[y, x] = Tools.BgrTool.ToGray(canvas[y, x]);
+                    canvas[y, x] = Tool.BgrTool.ToGray(canvas[y, x]);
         }
     }
 }

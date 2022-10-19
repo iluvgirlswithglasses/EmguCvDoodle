@@ -4,7 +4,7 @@ using Emgu.CV;
 
 namespace EmguCvDoodle.Effect
 {
-    internal class ContrastEffect
+    class ContrastEffect
     {
         private Image<Bgr, Byte> canvas;
 

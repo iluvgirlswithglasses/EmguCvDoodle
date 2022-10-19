@@ -70,6 +70,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tool\BgrTool.cs" />
+    <Compile Include="Tool\Num.cs" />
+    <Compile Include="Transform\Rotate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

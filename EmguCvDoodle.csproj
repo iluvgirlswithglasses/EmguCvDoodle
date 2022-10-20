@@ -67,6 +67,7 @@
     <Compile Include="Effect\Binary\BinaryEffect.cs" />
     <Compile Include="Effect\ContrastEffect.cs" />
     <Compile Include="Effect\GrayscaleEffect.cs" />
+    <Compile Include="Effect\SobelOperator.cs" />
     <Compile Include="Invoker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

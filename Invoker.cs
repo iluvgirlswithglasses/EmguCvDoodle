@@ -13,7 +13,7 @@ namespace EmguCvDoodle
 
         static public void GaussianBlur(ref Image<Bgr, Byte> canvas)
         {
-            canvas = canvas.SmoothGaussian(9);
+            canvas = canvas.SmoothGaussian(3);
         }
     }
 }

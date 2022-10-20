@@ -1,4 +1,5 @@
 ﻿using System;
+using Emgu.CV;
 using Emgu.CV.Structure;
 
 namespace EmguCvDoodle.Tool

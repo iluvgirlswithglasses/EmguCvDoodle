@@ -4,6 +4,7 @@ using Emgu.CV;
 using System;
 using EmguCvDoodle.Detector;
 using System.Drawing;
+using EmguCvDoodle.Effect;
 
 /*
 deploy requirement:
@@ -21,11 +22,12 @@ namespace EmguCvDoodle
     {
         static void Main(string[] args)
         {
-            Image<Gray, byte> canvas = new Image<Gray, byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\reimu.jpg");
+            Image<Gray, byte> canvas = new Image<Gray, byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\debian.png");
+            
             canvas = canvas.SmoothGaussian(3);
+            ImageViewer.Show(canvas, "src");
 
-            ImageViewer.Show(new Effect.SobelOperator(ref canvas).LibCreate());
-            new Effect.SobelOperator(ref canvas).Apply();
+            new HarrisCornerDetector(ref canvas).LibApply(0.001f);
             ImageViewer.Show(canvas);
         }
     }

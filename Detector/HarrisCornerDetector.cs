@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Security.Cryptography;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -34,6 +36,7 @@ namespace EmguCvDoodle.Detector
                 x2y2Derivative = gradX.Copy(),
                 det = gradX.Copy(),
                 trace = gradX.Copy(),
+                uncleansed = gradX.Copy(),
                 res = gradX.Copy();
 
             //
@@ -59,6 +62,8 @@ namespace EmguCvDoodle.Detector
                 for (int x = 0; x < canvas.Width; x++)
                     trace[y, x] = new Gray(trace[y, x].Intensity * 0.04);
             //
+            // CvInvoke.Subtract(det, trace, uncleansed);
+            // clean(ref uncleansed, ref res, threshold);
             CvInvoke.Subtract(det, trace, res);
 
             for (int y = 0; y < canvas.Height; y++)
@@ -83,12 +88,36 @@ namespace EmguCvDoodle.Detector
                         canvas[y, x] = new Gray(0);
         }
 
-        public void ImageFloatToByteDebug(float threshold)
+        public List<Point> LibGetCorners(float threshold)
         {
-            Image<Gray, byte> img = new Image<Gray, byte>(canvas.Size);
+            List<Point> ls = new List<Point>();
+            Image<Gray, float> cornerImg = new Image<Gray, float>(canvas.Size);
+            CvInvoke.CornerHarris(canvas, cornerImg, 3, 3, 0.04);
+
+            for (int y = 0; y < canvas.Height; y++)
+                for (int x = 0; x < canvas.Width; x++)
+                    if (cornerImg[y, x].Intensity > threshold)
+                        ls.Add(new Point(x, y));
+
+            return ls;
         }
 
-        public void ImageFloatToByte(float threshold) { 
+        // only keep the corners that matter the most
+        private void clean(ref Image<Gray, float> src, ref Image<Gray, float> des, float threshold)
+        {
+            for (int y = 1; y < src.Height - 1; y++)
+                for (int x = 1; x < src.Width - 1; x++)
+                    if (src[y, x].Intensity > threshold && src[y, x].Intensity >= findMax(ref src, y, x))
+                        des[y, x] = src[y, x];
+        }
+
+        private float findMax(ref Image<Gray, float> src, int cy, int cx)
+        {
+            float mx = -1e19f;
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                    mx = Math.Max(mx, (float) src[cy + i, cx + j].Intensity);
+            return mx;
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
+using EmguCvDoodle.Type;
 
 namespace EmguCvDoodle.Detector
 {
@@ -88,18 +86,38 @@ namespace EmguCvDoodle.Detector
                         canvas[y, x] = new Gray(0);
         }
 
-        public List<Point> LibGetCorners(float threshold)
+        public List<KeyPoint> LibGetCorners(float threshold, int quan)
         {
-            List<Point> ls = new List<Point>();
+            List<KeyPoint> ls = new List<KeyPoint>();
             Image<Gray, float> cornerImg = new Image<Gray, float>(canvas.Size);
             CvInvoke.CornerHarris(canvas, cornerImg, 3, 3, 0.04);
 
-            for (int y = 0; y < canvas.Height; y++)
-                for (int x = 0; x < canvas.Width; x++)
-                    if (cornerImg[y, x].Intensity > threshold)
-                        ls.Add(new Point(x, y));
+            for (int y = 1; y < canvas.Height - 1; y++)
+                for (int x = 1; x < canvas.Width - 1; x++)
+                    if (
+                        cornerImg[y, x].Intensity > threshold && 
+                        cornerImg[y, x].Intensity >= findMax(ref cornerImg, y, x) - 0.000005
+                    )
+                        ls.Add(new KeyPoint(y, x, cornerImg[y, x].Intensity));
 
-            return ls;
+            List<KeyPoint> res = new List<KeyPoint>();
+            KeyPoint mid = new KeyPoint(0, 0, 0);
+            ls.Sort((a, b) => a.Intensity.CompareTo(b.Intensity));
+            //
+            for (int i = 0; i < Math.Min(quan, ls.Count); i++)
+            {
+                res.Add(ls[ls.Count - 1 - i]);
+                mid.Y += res[i].Y;
+                mid.X += res[i].X;
+            }
+            mid.Y /= res.Count;
+            mid.X /= res.Count;
+            for (int i = 0; i < Math.Min(quan, ls.Count); i++)
+            {
+                res[i].Y -= mid.Y;
+                res[i].X -= mid.X;
+            }
+            return res;
         }
 
         // only keep the corners that matter the most
@@ -111,12 +129,12 @@ namespace EmguCvDoodle.Detector
                         des[y, x] = src[y, x];
         }
 
-        private float findMax(ref Image<Gray, float> src, int cy, int cx)
+        private double findMax(ref Image<Gray, float> src, int cy, int cx)
         {
-            float mx = -1e19f;
+            double mx = -1e19f;
             for (int i = -1; i <= 1; i++)
                 for (int j = -1; j <= 1; j++)
-                    mx = Math.Max(mx, (float) src[cy + i, cx + j].Intensity);
+                    mx = Math.Max(mx, src[cy + i, cx + j].Intensity);
             return mx;
         }
     }

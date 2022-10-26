@@ -1,10 +1,9 @@
 ﻿using Emgu.CV.Structure;
-using Emgu.CV.UI;
 using Emgu.CV;
 using System;
 using EmguCvDoodle.Detector;
-using System.Drawing;
-using EmguCvDoodle.Effect;
+using System.Collections.Generic;
+using EmguCvDoodle.Type;
 
 /*
 deploy requirement:
@@ -16,19 +15,29 @@ deploy requirement:
         Set platform to x64
 */
 
+/*
+some references for the future:
+    https://ai.stanford.edu/~syyeung/cvweb/tutorial2.html
+    http://matthewalunbrown.com/papers/ijcv2007.pdf
+*/
+
 namespace EmguCvDoodle
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Image<Gray, byte> canvas = new Image<Gray, byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\debian.png");
-            
-            canvas = canvas.SmoothGaussian(3);
-            ImageViewer.Show(canvas, "src");
+            Image<Gray, byte> src = new Image<Gray, byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\debian.png");
+            Image<Gray, byte> cmp = new Image<Gray, byte>("D:\\r\\siglaz\\EmguCvDoodle\\sample-images\\debian-scaled.png");
 
-            new HarrisCornerDetector(ref canvas).LibApply(0.001f);
-            ImageViewer.Show(canvas);
+            int lim = 100;
+
+            List<KeyPoint> srcKeys = new HarrisCornerDetector(ref src).LibGetCorners(0.0001f, lim);
+            List<KeyPoint> cmpKeys = new HarrisCornerDetector(ref cmp).LibGetCorners(0.0001f, lim);
+
+            int matches = KeypointsMatching.Compare(ref srcKeys, ref cmpKeys);
+
+            Console.WriteLine("{0} out of {1} keypoints matches", matches, lim);
         }
     }
 }

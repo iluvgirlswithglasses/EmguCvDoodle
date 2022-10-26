@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using EmguCvDoodle.Tool;
+using EmguCvDoodle.Type;
 
 namespace EmguCvDoodle.Transform
 {

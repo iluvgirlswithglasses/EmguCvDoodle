@@ -75,6 +75,7 @@
     <Compile Include="Tool\BgrTool.cs" />
     <Compile Include="Tool\Num.cs" />
     <Compile Include="Transform\Rotate.cs" />
+    <Compile Include="Type\KeyPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
